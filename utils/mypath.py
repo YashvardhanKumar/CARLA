@@ -9,19 +9,19 @@ class MyPath(object):
         assert(database in db_names)
 
         if database == 'msl' or database == 'smap':
-            return 'datasets/MSL_SMAP'
+            return 'CARLA/datasets/MSL_SMAP'
         elif database == 'power':
-            return 'datasets/Power'
+            return 'CARLA/datasets/Power'
         elif database == 'yahoo':
-            return 'datasets/yahoo'
+            return 'CARLA/datasets/yahoo'
         elif database == 'smd':
-            return 'datasets/SMD'
+            return 'CARLA/datasets/SMD'
         elif database == 'swat':
-            return 'datasets/SWAT'
+            return 'CARLA/datasets/SWAT'
         elif database == 'wadi':
-            return 'datasets/WADI'
+            return 'CARLA/datasets/WADI'
         elif database == 'kpi':
-            return 'datasets/KPI'
+            return 'CARLA/datasets/KPI'
         
         else:
             raise NotImplementedError

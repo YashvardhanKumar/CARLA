@@ -80,7 +80,7 @@ def main():
             #                                  split='train') # Dataset w/o augs for knn eval
 
     elif p['train_db_name'] == 'yahoo':
-        filename = os.path.join('datasets', 'A1Benchmark/', p['fname'])
+        filename = os.path.join(MyPath.db_root_dir('msl'), 'A1Benchmark', p['fname'])
         dataset = []
 
         print(filename)
