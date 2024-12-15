@@ -2,6 +2,7 @@
 import random
 import numpy as np
 import torch
+from torch import Tensor
 
 class NoiseTransformation(object):
     def __init__(self, sigma):
@@ -18,7 +19,7 @@ class SubAnomaly(object):
     def __init__(self, portion_len):
         self.portion_len = portion_len
 
-    def inject_frequency_anomaly(self, window,
+    def inject_frequency_anomaly(self, window: np.ndarray,
                                  subsequence_length: int= None,
                                  compression_factor: int = None,
                                  scale_factor: float = None,
@@ -94,13 +95,15 @@ class SubAnomaly(object):
 
         return np.squeeze(window)
 
-    def __call__(self, X):
+    def __call__(self, X: np.ndarray):
+
         """
         Adding sub anomaly with user-defined portion
         """
         window = X.copy()
         anomaly_seasonal = window.copy()
         anomaly_trend = window.copy()
+        
         anomaly_global = window.copy()
         anomaly_contextual = window.copy()
         anomaly_shapelet = window.copy()
@@ -188,7 +191,7 @@ class SubAnomaly(object):
         anomalous_window = random.choice(anomalies)
 
         return anomalous_window
-
+        
 
 
 

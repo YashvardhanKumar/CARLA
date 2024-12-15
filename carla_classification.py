@@ -31,7 +31,7 @@ def main():
 
     # CUDNN
    # torch.backends.cudnn.benchmark = True
-
+    print("")
     # Data
     print(colored('\n- Get dataset and dataloaders for ' + p['train_db_name'] + ' dataset - timeseries ' + p['fname'], 'green'))
     train_transformations = get_train_transformations(p)

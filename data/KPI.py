@@ -30,7 +30,7 @@ class KPI(Dataset):
 
         self.data = []
         self.targets = []
-        wsize, wstride = 200, 1
+        wsize, wstride = 60, 1
 
         if self.train:
             self.base_folder += 'train'

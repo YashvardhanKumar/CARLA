@@ -2,6 +2,7 @@
 import os
 import pandas
 import numpy as np
+import torch
 from torch.utils.data import Dataset
 from utils.mypath import MyPath
 import ast
@@ -31,7 +32,7 @@ class MSL(Dataset):
 
         self.data = []
         self.targets = []
-        wsz, stride = 200, 1
+        wsz, stride = 55, 1
 
         with open(os.path.join(self.root, 'labeled_anomalies.csv'), 'r') as file:
             csv_reader = pandas.read_csv(file, delimiter=',')
@@ -69,6 +70,7 @@ class MSL(Dataset):
             temp = (temp - self.mean) / self.std
 
         self.data = np.asarray(temp)
+        print(len(self.data))
 
         self.data, self.targets = self.convert_to_windows(wsz, stride)
 
@@ -94,6 +96,7 @@ class MSL(Dataset):
             else: lbl=0
             windows.append(w)
             wlabels.append(lbl)
+        print(type(windows))
         return np.stack(windows), np.stack(wlabels)
 
     def __getitem__(self, index):
@@ -107,6 +110,7 @@ class MSL(Dataset):
         if len(self.targets) > 0:
             target = self.targets[index].astype(int)
             class_name = self.classes[target]
+            
         else:
             target = 0
             class_name = ''

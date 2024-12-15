@@ -167,7 +167,7 @@ def main():
     # criterion = criterion.cuda()
 
     optimizer = get_optimizer(p, model)
- 
+
     # Checkpoint
     if os.path.exists(p['pretext_checkpoint']):
         print(colored('Restart from checkpoint {}'.format(p['pretext_checkpoint']), 'blue'))

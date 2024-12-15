@@ -75,7 +75,9 @@ def fill_ts_repository(p, loader, model, ts_repository, real_aug=False, ts_repos
             h = 1
 
         ts_org = torch.from_numpy(ts_org).float()
-        output = model(ts_org.reshape(b, h, w))
+        ts_org = ts_org.permute(0, 2, 1)  # Now shape is (b, w, h)
+        output = model(ts_org)
+        # output = model(ts_org.reshape(b, h, w))
         ts_repository.update(output, targets)
         if ts_repository_aug != None: ts_repository_aug.update(output, targets)
         if i % 100 == 0:

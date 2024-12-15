@@ -13,3 +13,4 @@ torchvision
 faiss-cpu
 easydict
 pyyaml
+transformers

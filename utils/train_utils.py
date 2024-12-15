@@ -1,11 +1,15 @@
 
 import torch
 import numpy as np
+from torch import nn
+
 from torch import Tensor
+from torch.utils.data.dataloader import DataLoader
 
 from utils.utils import AverageMeter, ProgressMeter
+from models.transformer_time import TransformerBackbone
 
-def pretext_train(train_loader, model, criterion, optimizer, epoch):
+def pretext_train(train_loader: DataLoader, model: TransformerBackbone, criterion, optimizer, epoch):
 
     losses = AverageMeter('Loss', ':.4e')
     progress = ProgressMeter(len(train_loader),
@@ -13,6 +17,8 @@ def pretext_train(train_loader, model, criterion, optimizer, epoch):
         prefix="Epoch: [{}]".format(epoch+1))
 
     model.train()
+    
+    print("dim size: ",train_loader)
 
     for i, batch in enumerate(train_loader):
         ts_org = batch['ts_org']
@@ -20,6 +26,7 @@ def pretext_train(train_loader, model, criterion, optimizer, epoch):
         #ts_sp_augmented = batch['ts_sp_augment']
         ts_ss_augmented = batch['ts_ss_augment']
         #ts_ss2_augmented = batch['ts_ss2_augment']
+
 
         if ts_org.ndim == 3:
             b, w, h = ts_org.shape
@@ -31,7 +38,7 @@ def pretext_train(train_loader, model, criterion, optimizer, epoch):
         #                                , torch.from_numpy(ts_ss2_augmented).float()], dim=0)
         input_: Tensor = torch.cat([torch.from_numpy(ts_org).float(), torch.from_numpy(ts_w_augmented).float(), torch.from_numpy(ts_ss_augmented).float()], dim=0)
         input_ = input_.view(b*3, h, w)
-
+        print("Inp size: ",input_.shape)
         output = model(input_)
         # output = output.view(b, 3, -1)
         loss = criterion(output)
