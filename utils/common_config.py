@@ -85,7 +85,7 @@ def get_criterion(p):
 
 def get_feature_dimensions_backbone(p):
     if p['backbone'] == 'resnet_ts':
-        return 8
+        return 16
     elif p['backbone'] == 'transformer_ts':
         # If we used embed_dim=64 in transformer_ts, return 64
         return 64

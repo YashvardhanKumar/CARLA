@@ -18,8 +18,6 @@ def pretext_train(train_loader: DataLoader, model: TransformerBackbone, criterio
 
     model.train()
     
-    print("dim size: ",train_loader)
-
     for i, batch in enumerate(train_loader):
         ts_org = batch['ts_org']
         ts_w_augmented = batch['ts_w_augment']
@@ -38,7 +36,6 @@ def pretext_train(train_loader: DataLoader, model: TransformerBackbone, criterio
         #                                , torch.from_numpy(ts_ss2_augmented).float()], dim=0)
         input_: Tensor = torch.cat([torch.from_numpy(ts_org).float(), torch.from_numpy(ts_w_augmented).float(), torch.from_numpy(ts_ss_augmented).float()], dim=0)
         input_ = input_.view(b*3, h, w)
-        print("Inp size: ",input_.shape)
         output = model(input_)
         # output = output.view(b, 3, -1)
         loss = criterion(output)

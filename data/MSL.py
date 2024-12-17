@@ -70,7 +70,6 @@ class MSL(Dataset):
             temp = (temp - self.mean) / self.std
 
         self.data = np.asarray(temp)
-        print(len(self.data))
 
         self.data, self.targets = self.convert_to_windows(wsz, stride)
 
@@ -96,7 +95,6 @@ class MSL(Dataset):
             else: lbl=0
             windows.append(w)
             wlabels.append(lbl)
-        print(type(windows))
         return np.stack(windows), np.stack(wlabels)
 
     def __getitem__(self, index):

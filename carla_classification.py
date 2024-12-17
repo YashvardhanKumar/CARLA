@@ -16,7 +16,7 @@ from utils.common_config import get_train_transformations, get_val_transformatio
 from utils.evaluate_utils import get_predictions, classification_evaluate, pr_evaluate
 from utils.train_utils import self_sup_classification_train
 from statsmodels.tsa.stattools import adfuller
-
+from collections import OrderedDict
 
 FLAGS = argparse.ArgumentParser(description='classification Loss')
 FLAGS.add_argument('--config_env', help='Location of path config file')
@@ -201,9 +201,9 @@ def main():
             torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
                         'epoch': epoch + 1, 'best_loss': best_loss, 'best_loss_head': best_loss_head, 'normal_label': normal_label},
                        p['classification_checkpoint'])
+    
 
-
-    model_checkpoint = torch.load(p['classification_model'], map_location='cpu')
+    model_checkpoint = torch.load(p['classification_model'],map_location='cpu')
     model.module.load_state_dict(model_checkpoint['model'])
     torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
                 'epoch': p['epochs'], 'best_loss': best_loss, 'best_loss_head': best_loss_head, 'normal_label': normal_label},
@@ -211,6 +211,8 @@ def main():
     normal_label = model_checkpoint['normal_label']
     tst_dl = get_val_dataloader(p, val_dataset)
     predictions, _ = get_predictions(p, tst_dl, model, True)
+    print(colored('best_f1: {}, best_loss: {}, best_loss_head: {}, normal_label: {}'.format(best_f1, best_loss, best_loss_head, normal_label), 'red'))
+
 
 if __name__ == "__main__":
     main()

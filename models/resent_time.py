@@ -339,7 +339,8 @@ class ConvBlock(nn.Module):
                               out_channels=out_channels,
                               kernel_size=kernel_size,
                               stride=stride),
-            nn.BatchNorm1d(num_features=out_channels),
+            nn.LayerNorm(out_channels),
+            # nn.BatchNorm1d(num_features=out_channels),
             nn.GELU(),  # ReLU replaced with GELU
         )
 
@@ -438,7 +439,7 @@ class DepthwiseSeparableConv1d(nn.Module):
 
 class BottleneckResNetRepresentation(nn.Module):
     """Enhanced ResNet Representation with Bottleneck Blocks and SE Blocks."""
-    def __init__(self, in_channels: int, mid_channels: int = 4, dropout_p: float = 0.1) -> None:
+    def __init__(self, in_channels: int, mid_channels: int = 4, dropout_p: float = 0.1, num_heads: int = 8) -> None:
         super().__init__()
 
         # for easier saving and loading
@@ -472,12 +473,15 @@ class BottleneckResNetRepresentation(nn.Module):
                 dropout_p=dropout_p
             ),
         )
-
+        self.attention = nn.MultiheadAttention(embed_dim=mid_channels * 4, num_heads=num_heads, batch_first=True)
         self.avgpool = nn.AdaptiveAvgPool1d(1)  # Global Average Pooling
 
     def forward(self, x: torch.Tensor):
-        z = self.layers(x)
-        z = self.avgpool(z).squeeze(-1)  # Shape: (batch_size, channels)
+        z = self.layers(x)  # Shape: (batch_size, channels, seq_length)
+        z = z.permute(0, 2, 1)  # Shape: (batch_size, seq_length, channels)
+        attn_output, _ = self.attention(z, z, z)  # Self-attention
+        attn_output = attn_output.permute(0, 2, 1)  # Shape: (batch_size, channels, seq_length)
+        z = self.avgpool(attn_output).squeeze(-1)  # Shape: (batch_size, channels)
         return z
 
 
