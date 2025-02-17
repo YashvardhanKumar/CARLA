@@ -150,7 +150,8 @@ def main():
     # Checkpoint
     if os.path.exists(p['classification_checkpoint']):
         print(colored('-- Model initialised from last checkpoint: {}'.format(p['classification_checkpoint']), 'green'))
-        checkpoint = torch.load(p['classification_checkpoint'], map_location='cpu')
+        checkpoint = torch.load(p['classification_checkpoint'], map_location='cpu', weights_only=True)
+
         model.load_state_dict(checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         start_epoch = checkpoint['epoch']
@@ -203,7 +204,7 @@ def main():
                        p['classification_checkpoint'])
     
 
-    model_checkpoint = torch.load(p['classification_model'],map_location='cpu')
+    model_checkpoint = torch.load(p['classification_model'], map_location='cpu', weights_only=True)
     model.module.load_state_dict(model_checkpoint['model'])
     torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
                 'epoch': p['epochs'], 'best_loss': best_loss, 'best_loss_head': best_loss_head, 'normal_label': normal_label},

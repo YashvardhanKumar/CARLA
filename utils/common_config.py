@@ -3,6 +3,8 @@ import math
 import numpy as np
 import torch
 import torchvision.transforms as transforms
+from torch.utils.data.dataloader import DataLoader
+
 from data.augment import NoiseTransformation, SubAnomaly
 from utils.collate import collate_custom
 from models.resent_time import resnet_ts
@@ -126,7 +128,8 @@ def get_model(p, pretrain_path=None):
 
     # Load pretrained weights if any
     if pretrain_path is not None and os.path.exists(pretrain_path):
-        state = torch.load(pretrain_path, map_location='cpu')
+        state = torch.load(pretrain_path, map_location='cpu', weights_only=True)
+
 
         if p['setup'] == 'classification':
             missing = model.load_state_dict(state, strict=False)
@@ -197,7 +200,8 @@ def get_train_dataset(p, transform, sanomaly, to_augmented_dataset=False,
 
 
 def get_aug_train_dataset(p, transform, to_neighbors_dataset=False):
-    dataloader = torch.load(p['contrastive_dataset'])
+    torch.serialization.add_safe_globals([DataLoader])
+    dataloader = torch.load(p['contrastive_dataset'], weights_only=False)
     if to_neighbors_dataset:  # Dataset returns a ts and one of its nearest neighbors.
         from data.custom_dataset import NeighborsDataset
         N_indices = np.load(p['topk_neighbors_train_path'])
