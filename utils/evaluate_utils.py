@@ -71,7 +71,10 @@ def get_predictions(p, dataloader, model, return_features=False, is_training=Fal
         else:
             targets.append(batch['target'])
 
-        ts = ts.unsqueeze(1)  # Now shape is [batch, 1, 250]
+        if ts.dim() == 2:
+            ts = ts.unsqueeze(1)  # now shape becomes [batch, 1, width]
+        elif ts.dim() == 4:
+            ts = ts.squeeze(1)    # remove the extra dimension; now shape becomes [batch, 1, width]
         res = model(ts, forward_pass='return_all')
         output = res['output']
         if return_features:
