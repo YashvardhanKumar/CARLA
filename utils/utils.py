@@ -75,7 +75,11 @@ def fill_ts_repository(p, loader, model, ts_repository, real_aug=False, ts_repos
             h = 1
 
         ts_org = torch.from_numpy(ts_org).float()
-        ts_org = ts_org.permute(0, 2, 1)  # Now shape is (b, w, h)
+        # If ts_org is 2D, add a channel dimension.
+        if ts_org.dim() == 2:
+            ts_org = ts_org.unsqueeze(1)  # Now shape is (batch, 1, width)
+        # Remove the permute call for Yahoo dataset:
+        # ts_org = ts_org.permute(0, 2, 1)  # This line is removed or skipped
         output = model(ts_org)
         # output = model(ts_org.reshape(b, h, w))
         ts_repository.update(output, targets)
@@ -98,6 +102,9 @@ def fill_ts_repository(p, loader, model, ts_repository, real_aug=False, ts_repos
             ts_ss_augment = batch['ts_ss_augment']  # .cuda(non_blocking=True)
             targets = torch.LongTensor([4]*ts_ss_augment.shape[0])
             ts_ss_augment = torch.from_numpy(ts_ss_augment).float()
+            # If ts_ss_augment is 2D, add a channel dimension to match con_data's 3D shape:
+            if ts_ss_augment.dim() == 2:
+                ts_ss_augment = ts_ss_augment.unsqueeze(1)  # Now shape becomes (batch, 1, width)
             con_data = torch.cat((con_data, ts_ss_augment), dim=0)
             con_target = torch.cat((con_target, targets), dim=0)
             output = model(ts_ss_augment.reshape(b, h, w))

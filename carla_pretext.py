@@ -208,6 +208,7 @@ def main():
     ts_repository_aug = TSRepository(len(train_dataset) * 2,
                                      p['model_kwargs']['features_dim'],
                                      p['num_classes'], p['criterion_kwargs']['temperature']) #need size of repository == 1+num_of_anomalies
+
     fill_ts_repository(p, base_dataloader, model, ts_repository_base, real_aug = True, ts_repository_aug = ts_repository_aug)
     out_pre = np.column_stack((ts_repository_base.features, ts_repository_base.targets))
     np.save(p['pretext_features_train_path'], out_pre)

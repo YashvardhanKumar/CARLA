@@ -71,7 +71,8 @@ def get_predictions(p, dataloader, model, return_features=False, is_training=Fal
         else:
             targets.append(batch['target'])
 
-        res = model(ts.view(bs, h, w), forward_pass='return_all')
+        ts = ts.unsqueeze(1)  # Now shape is [batch, 1, 250]
+        res = model(ts, forward_pass='return_all')
         output = res['output']
         if return_features:
             features[ptr: ptr+bs] = res['features']

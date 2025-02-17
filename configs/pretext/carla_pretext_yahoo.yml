@@ -21,7 +21,7 @@ criterion_kwargs:
    temperature: 0.4
 
 # Hyperparameters
-epochs: 30
+epochs: 1
 optimizer: adam
 optimizer_kwargs:
    #nesterov: False

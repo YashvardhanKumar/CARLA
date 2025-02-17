@@ -75,7 +75,7 @@ def self_sup_classification_train(train_loader, model, criterion, optimizer, epo
             b, w, h = anchors.shape
         else:
             b, w = anchors.shape
-            h =1
+            h = 1
         anchors = anchors.view(b, h, w)
         nneighbors = batch['NNeighbor'] #.cuda(non_blocking=True)
         nneighbors = nneighbors.view(b, h, w)
@@ -92,8 +92,16 @@ def self_sup_classification_train(train_loader, model, criterion, optimizer, epo
             fneighbors_output = model(fneighbors_features, forward_pass='head')
 
         else: # Calculate gradient for backprop of complete network
+            # if anchors.ndim != 3:
+            anchors = anchors.permute(0, 2, 1)  # shape becomes [batch, 1, 250]
             anchors_output = model(anchors)
+
+            # For nneighbors, apply the same permutation:
+            nneighbors = nneighbors.permute(0, 2, 1)  # shape becomes [batch, 1, 250]
             nneighbors_output = model(nneighbors)
+
+            # For fneighbors, also:
+            fneighbors = fneighbors.permute(0, 2, 1)  # shape becomes [batch, 1, 250]
             fneighbors_output = model(fneighbors)
 
         # Loss for every head
