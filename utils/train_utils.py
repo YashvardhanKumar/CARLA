@@ -30,7 +30,7 @@ def pretext_train(train_loader: DataLoader, model: TransformerBackbone, criterio
             b, w, h = ts_org.shape
         else:
             b, w = ts_org.shape
-            h =1
+            h = 1
         # input_: Tensor = torch.cat([torch.from_numpy(ts_org).float(), torch.from_numpy(ts_w_augmented).float(),
         #                             torch.from_numpy(ts_sp_augmented).float(), torch.from_numpy(ts_ss_augmented).float()
         #                                , torch.from_numpy(ts_ss2_augmented).float()], dim=0)

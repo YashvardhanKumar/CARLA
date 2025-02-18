@@ -183,7 +183,7 @@ def main():
         # model = model.cuda()
     
     # Training
-    pretext_best_loss = np.inf
+    pretext_best_loss = float('inf')
     for epoch in range(start_epoch, p['epochs']):
         print(colored('Epoch %d/%d' %(epoch+1, p['epochs']), 'yellow'))
         print(colored('-'*15, 'yellow'))
@@ -192,10 +192,10 @@ def main():
         print('Adjusted learning rate to {:.5f}'.format(lr))
         
         # print('EPOCH ----> ', epoch)
-        tmp_loss = pretext_train(train_dataloader, model, criterion, optimizer, epoch)
+        tmp_loss: float = pretext_train(train_dataloader, model, criterion, optimizer, epoch)
         
         # Checkpoint
-        if tmp_loss <= pretext_best_loss:
+        if tmp_loss is None or tmp_loss <= pretext_best_loss:
             pretext_best_loss = tmp_loss
             best_model = model
 
