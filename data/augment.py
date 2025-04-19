@@ -3,6 +3,32 @@ import random
 import numpy as np
 import torch
 from torch import Tensor
+# at top of data/augment.py
+import numpy as np
+from torch.utils.data import Dataset
+
+def get_random_neighbor(index, radius, dataset_length):
+    """
+    Pick a random index within ±radius of the given index,
+    clipped to [0, dataset_length-1].
+    """
+    low = max(0, index - radius)
+    high = min(dataset_length - 1, index + radius)
+    return np.random.randint(low, high + 1)
+
+class TemporalNeighbor(object):
+    def __init__(self, radius, dataset_length):
+        self.radius = radius
+        self.dataset_length = dataset_length
+
+    def __call__(self, X, idx):
+        # X is the anchor window, idx is its position in the full dataset
+        neigh_idx = get_random_neighbor(idx, self.radius, self.dataset_length)
+        # You’ll need access to the full array of windows—e.g. load it as a global
+        from data.custom_dataset import global_windows_array
+        return global_windows_array[neigh_idx]
+
+
 
 class NoiseTransformation(object):
     def __init__(self, sigma):

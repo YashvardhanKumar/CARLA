@@ -45,9 +45,10 @@ batch_size: 250
 num_workers: 1
 
 # Transformations
-augmentation_strategy: ts
+augmentation_strategy: temporal
 transformation_kwargs:
-   noise_sigma: 0.01
+   # noise_sigma: 0.01
+   radius: 10
 
 anomaly_kwargs:
    portion: 0.99
