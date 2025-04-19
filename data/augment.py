@@ -185,8 +185,8 @@ class SubAnomaly(object):
                      anomaly_seasonal,
                      anomaly_trend,
                      anomaly_global,
-                    #  anomaly_contextual,
-                     anomaly_shapelet
+                     anomaly_contextual,
+                    #  anomaly_shapelet
                      ]
 
         anomalous_window = random.choice(anomalies)
