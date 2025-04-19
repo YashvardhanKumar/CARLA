@@ -288,12 +288,6 @@ def get_train_transformations(p):
             NoiseTransformation(p['transformation_kwargs']['noise_sigma']),
             # Crop(p['transformation_kwargs']['crop_size'])
         ])
-    elif p['augmentation_strategy'] == 'temporal':
-        # assume you’ve populated `global_windows_array` somewhere
-        return TemporalNeighbor(
-            radius=p['transformation_kwargs']['radius'],
-            dataset_length=len(global_windows_array)
-        )
     else:
         raise ValueError('Invalid augmentation strategy {}'.format(p['augmentation_strategy']))
 

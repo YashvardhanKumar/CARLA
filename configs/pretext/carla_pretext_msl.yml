@@ -45,10 +45,19 @@ batch_size: 250
 num_workers: 1
 
 # Transformations
-augmentation_strategy: temporal
+augmentation_strategy: standard
+augmentation_kwargs:
+  random_resized_crop:
+    size: 200
+    scale: [0.8, 1.0]
+    ratio: [0.75, 1.3333]
+  normalize:
+    mean: [0.0]
+    std:  [1.0]
 transformation_kwargs:
-   # noise_sigma: 0.01
+   noise_sigma: 0.01
    radius: 10
 
 anomaly_kwargs:
    portion: 0.99
+
