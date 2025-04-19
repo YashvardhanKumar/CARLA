@@ -184,8 +184,8 @@ class SubAnomaly(object):
         anomalies = [
                      anomaly_seasonal,
                      anomaly_trend,
-                    #  anomaly_global,
-                     anomaly_contextual,
+                     anomaly_global,
+                    #  anomaly_contextual,
                      anomaly_shapelet
                      ]
 
