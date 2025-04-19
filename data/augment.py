@@ -154,14 +154,14 @@ class SubAnomaly(object):
 
         else:
             temp_win = window.reshape((len(window), 1))
-            # anomaly_seasonal = self.inject_frequency_anomaly(temp_win,
-            #                                               scale_factor=1,
-            #                                               trend_factor=0)
+            anomaly_seasonal = self.inject_frequency_anomaly(temp_win,
+                                                          scale_factor=1,
+                                                          trend_factor=0)
 
-            anomaly_trend = self.inject_frequency_anomaly(temp_win,
-                                                         compression_factor=1,
-                                                         scale_factor=1,
-                                                         trend_end=True)
+            # anomaly_trend = self.inject_frequency_anomaly(temp_win,
+            #                                              compression_factor=1,
+            #                                              scale_factor=1,
+            #                                              trend_end=True)
 
             anomaly_global = self.inject_frequency_anomaly(temp_win,
                                                         subsequence_length=3,
@@ -182,8 +182,8 @@ class SubAnomaly(object):
                                                       shapelet_factor=True)
 
         anomalies = [
-                    #  anomaly_seasonal,
-                     anomaly_trend,
+                     anomaly_seasonal,
+                    #  anomaly_trend,
                      anomaly_global,
                      anomaly_contextual,
                      anomaly_shapelet
