@@ -81,7 +81,7 @@ class ClassificationLoss(nn.Module):
         entropy_loss = entropy(torch.mean(anchors_prob, 0), input_as_probabilities = True)
 
         # Total loss
-        total_loss = consistency_loss - self.entropy_weight * entropy_loss - alpha*inconsistency_loss
+        total_loss = consistency_loss - self.entropy_weight * entropy_loss
 
         return total_loss, consistency_loss, inconsistency_loss, entropy_loss
 
